@@ -28,4 +28,4 @@ deno task dev
 
 ## Known Issues
 
-- [Deno workspace (monorepo)](https://docs.deno.com/runtime/fundamentals/workspaces/) does not play well with Vite ([related issue](https://github.com/denoland/deno/issues/26138))
+- [Deno workspaces (monorepos)](https://docs.deno.com/runtime/fundamentals/workspaces/) does not play well with Vite ([related issue](https://github.com/denoland/deno/issues/26138)), so we are not using workspaces in this project
