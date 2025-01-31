@@ -1,6 +1,0 @@
-{
-    "workspace": ["./backend"],
-    "fmt": {
-        "indentWidth": 4
-    }
-}
