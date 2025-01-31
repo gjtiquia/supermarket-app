@@ -2,6 +2,13 @@
 
 ## Commands
 
+Prerequisites: [Deno installed](https://docs.deno.com/runtime/getting_started/installation/)
+
+```bash
+# formatting
+deno fmt
+```
+
 ```bash
 cd backend
 
