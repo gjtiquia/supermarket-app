@@ -1,23 +1,26 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@std/assert@1": "1.0.11",
-    "jsr:@std/internal@^1.0.5": "1.0.5"
+    "jsr:@hono/hono@^4.6.20": "4.6.20",
+    "npm:create-hono@*": "0.15.2"
   },
   "jsr": {
-    "@std/assert@1.0.11": {
-      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
-      "dependencies": [
-        "jsr:@std/internal"
-      ]
-    },
-    "@std/internal@1.0.5": {
-      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    "@hono/hono@4.6.20": {
+      "integrity": "0db02d7b80db67a17e18b434c6105af002412cada5e908013086eb9fa9466a87"
+    }
+  },
+  "npm": {
+    "create-hono@0.15.2": {
+      "integrity": "sha512-VazPyfQZKiVjj6/e0xHfrkgq8jK3Qf7KMZe0mh9radsLzUdhMACZpXYEAX58MPOoPuJ1BoodCI/ap6GbdqZBvg=="
     }
   },
   "workspace": {
-    "dependencies": [
-      "jsr:@std/assert@1"
-    ]
+    "members": {
+      "backend": {
+        "dependencies": [
+          "jsr:@hono/hono@^4.6.20"
+        ]
+      }
+    }
   }
 }
