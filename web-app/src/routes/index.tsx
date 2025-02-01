@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
-import { client } from "./backend";
+import { createFileRoute } from '@tanstack/react-router'
+import { useState, useEffect } from 'react';
+import { client } from '../backend';
 
-function App() {
+export const Route = createFileRoute('/')({
+    component: Index,
+})
+
+function Index() {
     const [result, setResult] = useState("(loading)");
 
     useEffect(() => {
@@ -15,10 +20,8 @@ function App() {
     }, [])
 
     return (
-        <div className="h-dvh flex flex-col items-center justify-center">
+        <div className='p-2'>
             <h1>{result}</h1>
         </div>
     );
 }
-
-export default App;

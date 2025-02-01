@@ -1,13 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import deno from "@deno/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
+        TanStackRouterVite({ autoCodeSplitting: true }), // Must run before the react plugin
         react(),
-        deno(),
         tailwindcss(),
     ],
     server: {
