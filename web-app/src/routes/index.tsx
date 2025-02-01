@@ -15,7 +15,7 @@ function Index() {
         async function getItemsAsync() {
             const response = await client.api["recent-items"].$get();
             const json = await response.json();
-            setResult(json.items[0].name);
+            setResult(JSON.stringify(json));
         }
     }, [])
 
