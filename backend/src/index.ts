@@ -1,8 +1,11 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { serveStatic } from '@hono/node-server/serve-static'
 import api from "./api"
 
 const app = new Hono()
+  .get("*", serveStatic({ root: "../web-app/dist" }))
+  .get("/hello-world", (c) => c.text("hello world!"))
   .route("/api", api);
 
 export type AppType = typeof app;
