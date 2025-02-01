@@ -2,12 +2,9 @@
 
 ## Commands
 
-Prerequisites: [Deno installed](https://docs.deno.com/runtime/getting_started/installation/)
-
-```bash
-# formatting
-deno fmt
-```
+Prerequisites: 
+- [Deno installed](https://docs.deno.com/runtime/getting_started/installation/)
+- [pnpm installed](https://pnpm.io/installation)
 
 ```bash
 cd backend
@@ -23,10 +20,10 @@ deno task start
 cd web-app
 
 # install dependencies
-deno install
+pnpm install
 
 # start dev server
-deno task dev
+pnpm run dev
 ```
 
 ## Troubleshooting
@@ -36,3 +33,5 @@ deno task dev
 ## Known Issues
 
 - [Deno workspaces (monorepos)](https://docs.deno.com/runtime/fundamentals/workspaces/) does not play well with Vite ([related issue](https://github.com/denoland/deno/issues/26138)), so we are not using workspaces in this project
+- Deno's typescript errors are also not popping up properly on the Vite project, so we will use pnpm instead for the `/web-app`, and use Deno for the `/backend`
+
