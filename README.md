@@ -4,24 +4,39 @@
 
 Prerequisites: 
 - [pnpm installed](https://pnpm.io/installation)
-- (npm may be used as well, just replace `pnpm` with `npm`)
+
+### Development Commands
 
 ```bash
-cd backend
-
-# install dependencies
+# install all dependencies
 pnpm install
-
-# starts server at port 3000
-pnpm run start
 ```
 
 ```bash
-cd web-app
+# open a new terminal tab/window with /backend as the root
+cd backend
 
-# install dependencies
-pnpm install
+# start dev server at port 3000
+pnpm run dev
+```
+
+```bash
+# open a new terminal tab/window with /web-app as the root
+cd web-app
 
 # start dev server at port 5173
 pnpm run dev
+```
+
+### Production Commands
+
+```bash
+# install all dependencies
+pnpm install
+
+# build for production
+pnpm run build
+
+# serve /backend at port 3000
+pnpm run start
 ```

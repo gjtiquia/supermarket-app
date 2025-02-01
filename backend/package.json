@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
-    "build": "cd ../web-app && pnpm run build",
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
