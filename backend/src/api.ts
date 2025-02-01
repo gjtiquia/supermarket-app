@@ -14,25 +14,29 @@ type Item = {
 type Price = {
     price: number,
     unit: PriceUnit,
+    origin: string,
     discountReason?: string,
     imageUrls?: string[],
 }
 
-type Weight = {
-    value: number,
-    unit: "kg" | "lb"
-}
-
 type PriceUnit = {
     type: "each",
-    weight?: Weight,
+    weightOrVolume?: WeightOrVolume,
 } | {
-    type: "per kg" | "per lb",
+    type: "per kg" | "per lb" | "per oz" | "per g" | "per mL" | "per L",
 } | {
     type: "per pack",
     packCount?: number,
-    weight?: Weight,
+    weightOrVolume?: WeightOrVolume,
 }
+
+type WeightOrVolume = {
+    value: number,
+    unit: WeightUnit | VolumeUnit
+}
+
+type WeightUnit = "kg" | "lb" | "g" | "oz"
+type VolumeUnit = "mL" | "L"
 
 // TODO : once type is finalized should put into postgresDB
 // TODO : type (schema) should think from the perspective of what information does one input, one row, one transaction
@@ -44,12 +48,14 @@ const dummyItems: RecentItems = {
             aliases: ["kalabasa", "kabocha squash", "mama squash", "japanese pumpkin"],
             recentReportedPrice: {
                 price: 1.99,
-                unit: { type: "per kg" }
+                unit: { type: "per kg" },
+                origin: "C&C (Don Mills)",
             },
             lowestReportedPrice: {
                 price: 1.58,
                 unit: { type: "per kg" },
-                discountReason: "Special Offer"
+                origin: "C&C (Don Mills)",
+                discountReason: "Special Offer",
             },
         }
     ]
