@@ -40,3 +40,9 @@ pnpm run build
 # serve /backend at port 3000
 pnpm run start
 ```
+
+## Known Issues
+- as of 2025-02-01, Tailwind v4 has been released, but shadcn/ui does not officially support Tailwind v4 yet.
+    - [Related Issue](https://github.com/shadcn-ui/ui/discussions/2996)
+    - [shadcn progress in upgrading to v4](https://github.com/shadcn/app-tailwind-v4)
+    - best not to use shadcn/ui yet until v4 is officially supported
