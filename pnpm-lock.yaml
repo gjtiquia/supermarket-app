@@ -26,9 +26,6 @@ importers:
 
   web-app:
     dependencies:
-      '@deno/vite-plugin':
-        specifier: ^1.0.3
-        version: 1.0.3(vite@6.0.11(@types/node@20.17.16)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2))
       '@tailwindcss/vite':
         specifier: ^4.0.2
         version: 4.0.2(vite@6.0.11(@types/node@20.17.16)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2))
@@ -184,11 +181,6 @@ packages:
   '@babel/types@7.26.7':
     resolution: {integrity: sha512-t8kDRGrKXyp6+tjUh7hw2RLyclsW4TRoRvRHtSyAX9Bb5ldlFh+90YAYY6awRXrlB4G5G2izNeGySpATlFzmOg==}
     engines: {node: '>=6.9.0'}
-
-  '@deno/vite-plugin@1.0.3':
-    resolution: {integrity: sha512-As059Zjde6oaUw7+WXhu2WpnjnBzjUCs5+j21S1ilQRIorN+sCrArXpdSDsCXXnHQbCU1SHjVrjcca49YOuwIg==}
-    peerDependencies:
-      vite: 5.x || 6.x
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -1724,10 +1716,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
-
-  '@deno/vite-plugin@1.0.3(vite@6.0.11(@types/node@20.17.16)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2))':
-    dependencies:
-      vite: 6.0.11(@types/node@20.17.16)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.2)
 
   '@esbuild/aix-ppc64@0.23.1':
     optional: true
