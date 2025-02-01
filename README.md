@@ -10,6 +10,10 @@ Prerequisites:
 ```bash
 # install all dependencies
 pnpm install
+
+# you may see the following:
+# Ignored build scripts: esbuild. Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.
+# if so, then run "pnpm approve-builds", and then approve all packages to build
 ```
 
 ```bash
