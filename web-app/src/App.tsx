@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { client } from "./backend";
 
 function App() {
     const [result, setResult] = useState("(loading)");
@@ -7,8 +8,7 @@ function App() {
         getItemsAsync();
 
         async function getItemsAsync() {
-            // TODO : Hono RPC
-            const response = await fetch("/api/recent-items")
+            const response = await client.api["recent-items"].$get();
             const json = await response.json();
             setResult(json.items[0].name);
         }
