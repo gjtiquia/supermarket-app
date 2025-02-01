@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
+    // "module": "NodeNext", // Commented because relative path imports dont work unless moduleResolution is bundler
+    "moduleResolution": "bundler",
     "strict": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,

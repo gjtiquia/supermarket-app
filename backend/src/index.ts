@@ -1,22 +1,9 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-
-type RecentItems = {
-  items: Item[];
-};
-
-type Item = {
-  name: string;
-};
+import api from "./api"
 
 const app = new Hono()
-  .get("/api/recent-items", (c) => {
-    return c.json<RecentItems>({
-      items: [
-        { name: "pumpkin" },
-      ],
-    });
-  });
+  .route("/api", api);
 
 export type AppType = typeof app;
 
