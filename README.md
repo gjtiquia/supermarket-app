@@ -50,3 +50,4 @@ pnpm run start
     - [Related Issue](https://github.com/shadcn-ui/ui/discussions/2996)
     - [shadcn progress in upgrading to v4](https://github.com/shadcn/app-tailwind-v4)
     - best not to use shadcn/ui yet until v4 is officially supported
+        - tho for now copy and pasted `globals.css` to our `index.css` from `shadcn/app-tailwind-v4`

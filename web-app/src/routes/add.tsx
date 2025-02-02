@@ -6,7 +6,11 @@ export const Route = createFileRoute('/add')({
 })
 
 function Add() {
-    return <AddItemForm />
+    return (
+        <div className='p-2 max-w-sm mx-auto'>
+            <AddItemForm />
+        </div>
+    )
 }
 
 function Add_OLD() {
