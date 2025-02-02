@@ -1,3 +1,4 @@
+import { AddItemForm } from '@/components/addItemForm'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/add')({
@@ -5,6 +6,10 @@ export const Route = createFileRoute('/add')({
 })
 
 function Add() {
+    return <AddItemForm />
+}
+
+function Add_OLD() {
     return (
         <div className='p-2 flex flex-col gap-2'>
             <div className='flex gap-2'>
