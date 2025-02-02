@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react';
-import { client } from '../backend';
+import { client } from '@/backend';
 
 export const Route = createFileRoute('/')({
     component: Index,
