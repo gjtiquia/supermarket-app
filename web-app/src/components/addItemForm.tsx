@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -19,13 +18,7 @@ const formSchema = z.object({
     name: z.string().min(1, {
         message: "Item name must be at least 1 character.",
     }),
-    price: z.string()
-        .min(1, 'Price cannot be empty')
-        .default("")
-        .refine(
-            (val) => !isNaN(Number(val)) && Number(val) >= 0,
-            { message: 'Invalid price' }
-        ),
+    price: z.coerce.number(),
     unit: z.enum(["each", "per pack", "per kg", "per lb", "per g", "per oz", "per mL", "per L"])
 })
 
@@ -35,7 +28,7 @@ export function AddItemForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            price: "",
+            price: 0,
             unit: "each",
         },
     })
@@ -72,7 +65,7 @@ export function AddItemForm() {
                             <FormItem>
                                 <FormLabel>Price ($)</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input type="number" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
