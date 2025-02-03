@@ -13,7 +13,7 @@ function Index() {
         getItemsAsync();
 
         async function getItemsAsync() {
-            const response = await client.api["recent-items"].$get();
+            const response = await client.api.item.recent.$get();
             const json = await response.json();
             setResult(JSON.stringify(json));
         }

@@ -13,19 +13,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { client } from "@/backend"
 
-const formSchema = z.object({
-    name: z.string().min(1, {
-        message: "Item name must be at least 1 character.",
-    }),
-    price: z.coerce.number(),
-    unit: z.enum(["each", "per pack", "per kg", "per lb", "per g", "per oz", "per mL", "per L"])
-})
+import { addItemFormSchema } from "../../../backend/src/api/item/add"
 
 export function AddItemForm() {
     // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof addItemFormSchema>>({
+        resolver: zodResolver(addItemFormSchema),
         defaultValues: {
             name: "",
             price: 0,
@@ -34,10 +29,15 @@ export function AddItemForm() {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof addItemFormSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+
+        // TODO : use Tanstack Query mutation for backend error handling on the frontend
+        client.api.item.add.$post({
+            json: values
+        })
     }
 
     return (
