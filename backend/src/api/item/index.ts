@@ -19,7 +19,7 @@ const app = new Hono()
         console.log(`${c.req.url}`)
         console.log("json:", json);
 
-        // TODO : add to database
+        // TODO : add to database, together with created_at / modified_at
 
         return c.body(null);
     })

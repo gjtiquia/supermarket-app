@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -16,15 +17,27 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { client } from "@/backend"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
+import { Label } from "./ui/label"
 
 export function AddItemForm() {
     // 1. Define your form.
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
-            name: "",
+            // === Basic ===
+            itemName: "",
             price: 0,
-            unit: "each",
+            priceUnit: "each",
+            origin: "",
+
+            // === Advanced ===
+            // TODO : how to handle validation if these are optional?
+            // TODO : and how to let the server know that, these are just defaults...? and should NOT be used in consideration...?
+            // TODO : perhaps a... "show advanced settings" bool? but then even so, not all will be input😂
+            // TODO : or i guess in the logic that uses the values, gotta ignore invalid values too (ie. dun divide by zero, negative numbers)
+            packCount: 0,
+            totalWeightOrVolume: 0,
+            aliases: [],
         },
     })
 
@@ -40,17 +53,30 @@ export function AddItemForm() {
         })
     }
 
+    // TODO : for string array input
+    /*
+    shadcn didnt implement one yet, despite heavy community pushes
+    - https://github.com/shadcn-ui/ui/issues/3647
+
+    react hook form docs has some example code of implementing
+    - https://react-hook-form.com/docs/usefieldarray
+
+    i suppose the nicest way would be to hv tag/badge inputs
+    but good old (+) button to add item, and (x) to delete item, might just work
+    (of cuz thats more work tho😂)
+    */
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="itemName"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Item Name</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <Input placeholder="eg. Apples" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -74,7 +100,7 @@ export function AddItemForm() {
 
                     <FormField
                         control={form.control}
-                        name="unit"
+                        name="priceUnit"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Unit</FormLabel>
@@ -100,6 +126,96 @@ export function AddItemForm() {
                         )}
                     />
                 </div>
+
+                <FormField
+                    control={form.control}
+                    name="origin"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Origin</FormLabel>
+                            <FormControl>
+                                <Input placeholder="eg. Costco" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                {/* // TODO : Advanced dropdown */}
+                <>
+                    {/* // TODO : Show if "per pack" */}
+                    <FormField
+                        control={form.control}
+                        name="packCount"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Pack Count</FormLabel>
+                                <FormControl>
+                                    <Input type="number" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* // TODO : Show if "each" or "per pack" */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="totalWeightOrVolume"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Total Weight or Volume</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="totalWeightOrVolumeUnit"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Unit</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a unit" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="kg">kg</SelectItem>
+                                            <SelectItem value="lb">lb</SelectItem>
+                                            <SelectItem value="g">g</SelectItem>
+                                            <SelectItem value="oz">oz</SelectItem>
+                                            <SelectItem value="mL">mL</SelectItem>
+                                            <SelectItem value="L">L</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* // TODO : aliases */}
+
+                    <FormField
+                        control={form.control}
+                        name="discountReason"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Discount Reason</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="eg. Weekend Discount" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </>
 
                 <div className="py-1"></div>
                 <Button type="submit">Submit</Button>
