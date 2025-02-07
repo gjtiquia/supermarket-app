@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,7 @@ import { addItemFormSchema } from "../../../backend/src/api/item/add"
 import { Label } from "./ui/label"
 
 export function AddItemForm() {
-    // 1. Define your form.
+    // Define your form.
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
@@ -44,10 +44,14 @@ export function AddItemForm() {
             packCount: 0,
             totalWeightOrVolume: 0,
             aliases: [],
+            discountReason: "",
         },
     })
 
-    // 2. Define a submit handler.
+    // Subscribe to the value of "priceUnit", rerender if changes (cuz we do conditional rendering with this)
+    const priceUnit = useWatch({ control: form.control, name: "priceUnit" })
+
+    // Define a submit handler.
     function onSubmit(values: z.infer<typeof addItemFormSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
@@ -151,29 +155,14 @@ export function AddItemForm() {
                     <AccordionItem value="item-1">
                         <AccordionTrigger>Advanced</AccordionTrigger>
                         <AccordionContent className="space-y-4">
-                            {/* // TODO : Show if "per pack" */}
-                            <FormField
-                                control={form.control}
-                                name="packCount"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Pack Count</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* // TODO : Show if "each" or "per pack" */}
-                            <div className="grid grid-cols-2 gap-4">
+                            {
+                                priceUnit === "per pack" &&
                                 <FormField
                                     control={form.control}
-                                    name="totalWeightOrVolume"
+                                    name="packCount"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Total Weight or Volume</FormLabel>
+                                            <FormLabel>Pack Count</FormLabel>
                                             <FormControl>
                                                 <Input type="number" {...field} />
                                             </FormControl>
@@ -181,32 +170,51 @@ export function AddItemForm() {
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="totalWeightOrVolumeUnit"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Unit</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            }
+                            {
+                                (priceUnit === "per pack" || priceUnit === "each") &&
+                                <div className="grid grid-cols-2 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="totalWeightOrVolume"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Total Weight or Volume</FormLabel>
                                                 <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select a unit" />
-                                                    </SelectTrigger>
+                                                    <Input type="number" {...field} />
                                                 </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value="kg">kg</SelectItem>
-                                                    <SelectItem value="lb">lb</SelectItem>
-                                                    <SelectItem value="g">g</SelectItem>
-                                                    <SelectItem value="oz">oz</SelectItem>
-                                                    <SelectItem value="mL">mL</SelectItem>
-                                                    <SelectItem value="L">L</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="totalWeightOrVolumeUnit"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Unit</FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select a unit" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        <SelectItem value="kg">kg</SelectItem>
+                                                        <SelectItem value="lb">lb</SelectItem>
+                                                        <SelectItem value="g">g</SelectItem>
+                                                        <SelectItem value="oz">oz</SelectItem>
+                                                        <SelectItem value="mL">mL</SelectItem>
+                                                        <SelectItem value="L">L</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            }
+
 
                             {/* // TODO : aliases */}
 
