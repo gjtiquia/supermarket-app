@@ -14,6 +14,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 import { client } from "@/backend"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
@@ -141,81 +147,87 @@ export function AddItemForm() {
                     )}
                 />
 
-                {/* // TODO : Advanced dropdown */}
-                <>
-                    {/* // TODO : Show if "per pack" */}
-                    <FormField
-                        control={form.control}
-                        name="packCount"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Pack Count</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    {/* // TODO : Show if "each" or "per pack" */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="totalWeightOrVolume"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Total Weight or Volume</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="totalWeightOrVolumeUnit"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Unit</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>Advanced</AccordionTrigger>
+                        <AccordionContent className="space-y-4">
+                            {/* // TODO : Show if "per pack" */}
+                            <FormField
+                                control={form.control}
+                                name="packCount"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Pack Count</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a unit" />
-                                            </SelectTrigger>
+                                            <Input type="number" {...field} />
                                         </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="kg">kg</SelectItem>
-                                            <SelectItem value="lb">lb</SelectItem>
-                                            <SelectItem value="g">g</SelectItem>
-                                            <SelectItem value="oz">oz</SelectItem>
-                                            <SelectItem value="mL">mL</SelectItem>
-                                            <SelectItem value="L">L</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                    {/* // TODO : aliases */}
+                            {/* // TODO : Show if "each" or "per pack" */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="totalWeightOrVolume"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Total Weight or Volume</FormLabel>
+                                            <FormControl>
+                                                <Input type="number" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="totalWeightOrVolumeUnit"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Unit</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a unit" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="kg">kg</SelectItem>
+                                                    <SelectItem value="lb">lb</SelectItem>
+                                                    <SelectItem value="g">g</SelectItem>
+                                                    <SelectItem value="oz">oz</SelectItem>
+                                                    <SelectItem value="mL">mL</SelectItem>
+                                                    <SelectItem value="L">L</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
-                    <FormField
-                        control={form.control}
-                        name="discountReason"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Discount Reason</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="eg. Weekend Discount" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </>
+                            {/* // TODO : aliases */}
+
+                            <FormField
+                                control={form.control}
+                                name="discountReason"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Discount Reason</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="eg. Weekend Discount" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="pb-1"></div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
 
                 <div className="py-1"></div>
                 <Button type="submit">Submit</Button>
