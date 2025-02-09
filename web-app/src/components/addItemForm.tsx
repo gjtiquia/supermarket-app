@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
+import { useMutation } from "@tanstack/react-query"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -19,14 +20,13 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { client } from "@/backend"
-import { useAddItem } from "@/lib/mutations/useAddItem"
+import { client } from "@/lib/hono"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
 
 export function AddItemForm() {
-    const addItemMutation = useAddItem()
-    // Define your form.
+
+
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
@@ -50,6 +50,15 @@ export function AddItemForm() {
 
     // Subscribe to the value of "priceUnit", rerender if changes (cuz we do conditional rendering with this)
     const priceUnit = useWatch({ control: form.control, name: "priceUnit" })
+
+    const addItemMutation = useMutation({
+        mutationFn: async (values: z.infer<typeof addItemFormSchema>) => {
+            const response = await client.api.item.add.$post({
+                json: values
+            })
+            return response
+        }
+    })
 
     // Define a submit handler.
     function onSubmit(values: z.infer<typeof addItemFormSchema>) {
