@@ -20,10 +20,12 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { client } from "@/backend"
+import { useAddItem } from "@/lib/mutations/useAddItem"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
 
 export function AddItemForm() {
+    const addItemMutation = useAddItem()
     // Define your form.
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema),
@@ -51,13 +53,15 @@ export function AddItemForm() {
 
     // Define a submit handler.
     function onSubmit(values: z.infer<typeof addItemFormSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-
-        // TODO : use Tanstack Query mutation for backend error handling on the frontend
-        client.api.item.add.$post({
-            json: values
+        addItemMutation.mutate(values, {
+            onSuccess: () => {
+                form.reset()
+                // TODO: Show success toast/notification
+            },
+            onError: (error) => {
+                // TODO: Show error toast/notification
+                console.error("Failed to add item:", error)
+            }
         })
     }
 
@@ -236,7 +240,12 @@ export function AddItemForm() {
                 </Accordion>
 
                 <div className="py-1"></div>
-                <Button type="submit">Submit</Button>
+                <Button
+                    type="submit"
+                    disabled={addItemMutation.isPending}
+                >
+                    {addItemMutation.isPending ? "Adding..." : "Submit"}
+                </Button>
             </form>
         </Form>
     )
