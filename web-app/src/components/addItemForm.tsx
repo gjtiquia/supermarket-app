@@ -21,11 +21,12 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { client } from "@/lib/hono"
+import { useToast } from "@/components/ui/use-toast"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
 
 export function AddItemForm() {
-
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema),
@@ -65,10 +66,17 @@ export function AddItemForm() {
         addItemMutation.mutate(values, {
             onSuccess: () => {
                 form.reset()
-                // TODO: Show success toast/notification
+                toast({
+                    title: "Success",
+                    description: "Item added successfully!",
+                })
             },
             onError: (error) => {
-                // TODO: Show error toast/notification
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: "Failed to add item. Please try again.",
+                })
                 console.error("Failed to add item:", error)
             }
         })
