@@ -21,7 +21,14 @@ const app = new Hono()
 
         // TODO : add to database, together with created_at / modified_at
 
-        return c.body(null);
+        return c.json({
+            message: `Added "${json.itemName}" at $${json.price} ${json.priceUnit}${json.origin ? ` from ${json.origin}` : ''}`,
+            item: {
+                ...json,
+                created_at: new Date().toISOString(),
+                modified_at: new Date().toISOString()
+            }
+        });
     })
 
 export default app;

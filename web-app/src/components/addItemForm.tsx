@@ -57,18 +57,19 @@ export function AddItemForm() {
             const response = await client.api.item.add.$post({
                 json: values
             })
-            return response
+            return response.json()
         }
     })
 
     // Define a submit handler.
     function onSubmit(values: z.infer<typeof addItemFormSchema>) {
         addItemMutation.mutate(values, {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 form.reset()
                 toast({
-                    title: "Success",
-                    description: "Item added successfully!",
+                    title: "Item Added Successfully",
+                    description: data.message,
+                    variant: "default"
                 })
             },
             onError: (error) => {
