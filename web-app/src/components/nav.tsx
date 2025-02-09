@@ -1,5 +1,5 @@
 import { Home, Search, Plus } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
 import { cn } from '@/lib/utils'
 
@@ -10,6 +10,9 @@ const navItems = [
 ] as const
 
 export function Nav() {
+    const router = useRouterState()
+    const currentRoute = navItems.find(item => item.to === router.location.pathname)
+
     return (
         <>
             {/* Desktop Navigation */}
@@ -36,6 +39,18 @@ export function Nav() {
                 <hr className="opacity-50" />
             </nav>
 
+            {/* Mobile Header */}
+            <header className="md:hidden sticky top-0 z-10 transition-colors duration-300">
+                <div className="bg-gradient-to-b from-background/95 to-background/60 backdrop-blur-md border-b shadow-sm">
+                    <div className="flex justify-between items-center max-w-md mx-auto px-4 py-3">
+                        <h1 className="text-lg font-medium">
+                            {currentRoute?.label || 'Supermarket App'}
+                        </h1>
+                        <ThemeToggle />
+                    </div>
+                </div>
+            </header>
+
             {/* Mobile Navigation */}
             <nav className="md:hidden fixed bottom-0 left-0 right-0 z-10 transition-colors duration-300">
                 <div className="bg-gradient-to-t from-background/95 to-background/60 backdrop-blur-md border-t shadow-lg">
@@ -57,10 +72,6 @@ export function Nav() {
                                 <span className="text-[11px] font-medium opacity-85">{label}</span>
                             </Link>
                         ))}
-                        <div className="flex flex-col items-center gap-1 px-4 py-2.5">
-                            <ThemeToggle />
-                            <span className="text-[11px] font-medium opacity-85">Theme</span>
-                        </div>
                     </div>
                 </div>
             </nav>
