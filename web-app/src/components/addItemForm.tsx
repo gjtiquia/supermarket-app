@@ -231,6 +231,20 @@ export function AddItemForm() {
                                 </div>
                             }
 
+                            <FormField
+                                control={form.control}
+                                name="discountReason"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Discount Reason</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="eg. Weekend Discount" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
                             <div className="space-y-2">
                                 <FormLabel>Aliases</FormLabel>
                                 <div className="space-y-2">
@@ -269,20 +283,6 @@ export function AddItemForm() {
                                     Add Alias
                                 </Button>
                             </div>
-
-                            <FormField
-                                control={form.control}
-                                name="discountReason"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Discount Reason</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="eg. Weekend Discount" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
 
                             <div className="pb-1"></div>
                         </AccordionContent>
