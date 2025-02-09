@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -23,7 +22,6 @@ import {
 import { client } from "@/backend"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
-import { Label } from "./ui/label"
 
 export function AddItemForm() {
     // Define your form.
