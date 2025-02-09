@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm, useWatch, useFieldArray } from "react-hook-form"
 import { z } from "zod"
 import { useMutation } from "@tanstack/react-query"
 
@@ -38,15 +38,18 @@ export function AddItemForm() {
             origin: "",
 
             // === Advanced ===
-            // TODO : how to handle validation if these are optional?
-            // TODO : and how to let the server know that, these are just defaults...? and should NOT be used in consideration...?
-            // TODO : perhaps a... "show advanced settings" bool? but then even so, not all will be input😂
-            // TODO : or i guess in the logic that uses the values, gotta ignore invalid values too (ie. dun divide by zero, negative numbers)
             packCount: 0,
             totalWeightOrVolume: 0,
             aliases: [],
             discountReason: "",
         },
+    })
+
+    // Add useFieldArray hook for aliases
+    const fieldArray = useFieldArray<z.infer<typeof addItemFormSchema>>({
+        control: form.control,
+        // @ts-expect-error -- // TODO: Fix type error properly
+        name: "aliases"
     })
 
     // Subscribe to the value of "priceUnit", rerender if changes (cuz we do conditional rendering with this)
@@ -83,18 +86,11 @@ export function AddItemForm() {
         })
     }
 
-    // TODO : for string array input
-    /*
-    shadcn didnt implement one yet, despite heavy community pushes
-    - https://github.com/shadcn-ui/ui/issues/3647
-
-    react hook form docs has some example code of implementing
-    - https://react-hook-form.com/docs/usefieldarray
-
-    i suppose the nicest way would be to hv tag/badge inputs
-    but good old (+) button to add item, and (x) to delete item, might just work
-    (of cuz thats more work tho😂)
-    */
+    // Function to handle adding new alias
+    const handleAddAlias = () => {
+        // @ts-expect-error -- TODO: Fix type error properly
+        fieldArray.append("")
+    }
 
     return (
         <Form {...form}>
@@ -235,8 +231,44 @@ export function AddItemForm() {
                                 </div>
                             }
 
-
-                            {/* // TODO : aliases */}
+                            <div className="space-y-2">
+                                <FormLabel>Aliases</FormLabel>
+                                <div className="space-y-2">
+                                    {fieldArray.fields.map((field, index) => (
+                                        <div key={field.id} className="flex gap-2">
+                                            <FormField
+                                                control={form.control}
+                                                name={`aliases.${index}`}
+                                                render={({ field }) => (
+                                                    <FormItem className="flex-1">
+                                                        <FormControl>
+                                                            <Input placeholder="Alternative name" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                size="icon"
+                                                onClick={() => fieldArray.remove(index)}
+                                            >
+                                                ×
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="mt-2"
+                                    onClick={handleAddAlias}
+                                >
+                                    Add Alias
+                                </Button>
+                            </div>
 
                             <FormField
                                 control={form.control}
