@@ -1,11 +1,15 @@
-# Supermarket App
+# supermarket app
 
-## Commands
+## environment variables
 
-Prerequisites: 
+`/backend/.env` is expected for running in a local environment. see `/backend/.env.example`.
+
+## commands
+
+prerequisites: 
 - [pnpm installed](https://pnpm.io/installation)
 
-### Development Commands
+### development commands
 
 ```bash
 # install all dependencies
@@ -32,7 +36,7 @@ cd web-app
 pnpm run dev
 ```
 
-### Production Commands
+### production commands
 
 ```bash
 # install all dependencies
