@@ -54,4 +54,14 @@ pnpm run start
     - shadcn is LOCKED IN and working on it
         - https://x.com/shadcn/status/1886113728623767563?s=46
 
-  
+## TODO
+
+- [ ] auth with better-auth (email + password first for now)
+- [ ] study if its easy to add OAuth in the future and auto merge with email/password
+- [ ] sign up / sign in flow
+- [ ] only allow adding items if signed in (C in CRUD)
+- [ ] allow reading items if not signed in (R in CRUD) (just read most recent with pagination first)
+- [ ] only allow updating and deleting items that i have uploaded (U in CRUD)
+- [ ] search queries - by name
+- [ ] show lowest, highest, average price
+- [ ] price history graph
