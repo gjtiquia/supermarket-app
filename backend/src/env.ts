@@ -4,7 +4,12 @@ import { z } from "zod";
 
 export const env = createEnv({
     server: {
+        // Postgres
         DATABASE_URL: z.string().url(),
+
+        // BetterAuth
+        BETTER_AUTH_SECRET: z.string(),
+        BETTER_AUTH_URL: z.string().url(),
     },
 
     /**
