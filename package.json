@@ -3,7 +3,7 @@
     "author": "GJ Tiquia",
     "scripts": {
         "start": "cd backend && pnpm run start",
-        "build": "cd web-app && pnpm run build"
+        "build": "cd backend && pnpm run build && cd ../web-app && pnpm run build"
     },
     "pnpm": {
         "onlyBuiltDependencies": [

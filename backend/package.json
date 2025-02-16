@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
+    "build": "tsx build.ts",
     "dev": "tsx watch src/index.ts",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
