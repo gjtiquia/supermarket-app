@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import item from "./item"
-import sandbox from "./sandbox"
-import auth from "./auth"
+import item from "@/api/item"
+import sandbox from "@/api/sandbox"
+import auth from "@/api/auth"
 
 const app = new Hono()
     .route("/sandbox", sandbox)

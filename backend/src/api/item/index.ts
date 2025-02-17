@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from '@hono/zod-validator'
-import { type RecentItems, dummyItems } from "./recent";
-import { addItemFormSchema } from "./add";
+import { type RecentItems, dummyItems } from "@/api/item/recent";
+import { addItemFormSchema } from "@/api/item/add";
 
 const app = new Hono()
     .get("/recent", (c) => c.json<RecentItems>(dummyItems))
