@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as SearchImport } from './routes/search'
 import { Route as AddImport } from './routes/add'
+import { Route as AccountImport } from './routes/account'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -26,6 +27,12 @@ const SearchRoute = SearchImport.update({
 const AddRoute = AddImport.update({
   id: '/add',
   path: '/add',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountRoute = AccountImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,6 +51,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountImport
       parentRoute: typeof rootRoute
     }
     '/add': {
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/add': typeof AddRoute
   '/search': typeof SearchRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/add': typeof AddRoute
   '/search': typeof SearchRoute
 }
@@ -80,27 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/add': typeof AddRoute
   '/search': typeof SearchRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add' | '/search'
+  fullPaths: '/' | '/account' | '/add' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/search'
-  id: '__root__' | '/' | '/add' | '/search'
+  to: '/' | '/account' | '/add' | '/search'
+  id: '__root__' | '/' | '/account' | '/add' | '/search'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   AddRoute: typeof AddRoute
   SearchRoute: typeof SearchRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   AddRoute: AddRoute,
   SearchRoute: SearchRoute,
 }
@@ -116,12 +135,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/account",
         "/add",
         "/search"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/account": {
+      "filePath": "account.tsx"
     },
     "/add": {
       "filePath": "add.tsx"
