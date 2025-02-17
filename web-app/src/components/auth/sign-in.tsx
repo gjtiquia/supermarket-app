@@ -2,14 +2,71 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth";
+import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from "@/components/ui/form";
+
+const signInSchema = z.object({
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(1, "Password is required"),
+});
+
+type SignInFormValues = z.infer<typeof signInSchema>;
 
 export function SignIn() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
+
+    const form = useForm<SignInFormValues>({
+        resolver: zodResolver(signInSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+
+    const signInMutation = useMutation({
+        mutationFn: async (values: SignInFormValues) => {
+            const response = await authClient.signIn.email(values);
+
+            if (response.error) {
+                throw new Error(response.error.message);
+            }
+
+            return response.data;
+        },
+        onError: (error) => {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to sign in. Please check your credentials and try again.",
+            });
+            console.error(error);
+        },
+        onSuccess: () => {
+            toast({
+                title: "Success",
+                description: "Signed in successfully",
+                variant: "default"
+            });
+            form.reset();
+            // TODO: redirect to dashboard/homepage
+        }
+    });
+
+    function onSubmit(values: SignInFormValues) {
+        signInMutation.mutate(values);
+    }
 
     return (
         <Card className="max-w-md">
@@ -21,51 +78,62 @@ export function SignIn() {
             </CardHeader>
 
             <CardContent>
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                            value={email}
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem className="grid gap-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <FormControl>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            placeholder="m@example.com"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
 
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                        </div>
-
-                        <Input
-                            id="password"
-                            type="password"
-                            placeholder="password"
-                            autoComplete="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem className="grid gap-2">
+                                    <div className="flex items-center">
+                                        <Label htmlFor="password">Password</Label>
+                                    </div>
+                                    <FormControl>
+                                        <Input
+                                            id="password"
+                                            type="password"
+                                            placeholder="Password"
+                                            autoComplete="current-password"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
 
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={loading}
-                        onClick={async () => {
-                            await authClient.signIn.email({ email, password });
-                        }}
-                    >
-                        {loading ? (
-                            <Loader2 size={16} className="animate-spin" />
-                        ) : (
-                            "Login"
-                        )}
-                    </Button>
-                </div>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={signInMutation.isPending}
+                        >
+                            {signInMutation.isPending ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                "Login"
+                            )}
+                        </Button>
+                    </form>
+                </Form>
             </CardContent>
 
             <CardFooter>
