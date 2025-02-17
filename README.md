@@ -60,8 +60,9 @@ pnpm run start
 
 ## TODO
 
-- [ ] auth with better-auth (email + password first for now)
-- [ ] study if its easy to add OAuth in the future and auto merge with email/password
+- [x] auth with better-auth (email + password first for now)
+- [x] study if its easy to add OAuth in the future and auto merge with email/password
+    - pretty straightforward: https://www.better-auth.com/docs/concepts/users-accounts#account-linking
 - [ ] sign up / sign in flow
 - [ ] only allow adding items if signed in (C in CRUD)
 - [ ] allow reading items if not signed in (R in CRUD) (just read most recent with pagination first)
