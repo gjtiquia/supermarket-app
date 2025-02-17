@@ -16,10 +16,10 @@ export function Nav() {
 
     return (
         <>
-            {/* Desktop Navigation */}
-            <nav className="hidden md:block sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
-                <div className="p-3 flex justify-between items-center max-w-7xl mx-auto px-4">
-                    <div className="flex gap-6">
+            {/* Desktop Side Navigation */}
+            <nav className="hidden md:block fixed left-0 top-0 h-screen z-10 bg-background/80 backdrop-blur-sm border-r">
+                <div className="h-full flex flex-col justify-between p-3">
+                    <div className="flex flex-col gap-6">
                         {navItems.map(({ to, icon: Icon, label }) => (
                             <Link
                                 key={to}
@@ -27,17 +27,17 @@ export function Nav() {
                                 className={cn(
                                     'flex items-center gap-2.5 px-4 py-2 rounded-md transition-all duration-200',
                                     'hover:bg-accent/80 hover:scale-105',
-                                    '[&.active]:font-medium [&.active]:bg-accent [&.active]:scale-105 [&.active]:shadow-sm'
+                                    '[&.active]:font-medium [&.active]:bg-accent [&.active]:scale-105 [&.active]:shadow-sm',
+                                    'xl:w-48 md:w-14'
                                 )}
                             >
                                 <Icon className="h-[18px] w-[18px]" />
-                                <span>{label}</span>
+                                <span className="hidden xl:inline">{label}</span>
                             </Link>
                         ))}
                     </div>
                     <ThemeToggle />
                 </div>
-                <hr className="opacity-50" />
             </nav>
 
             {/* Mobile Header */}
