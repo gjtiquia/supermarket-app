@@ -44,7 +44,12 @@ export function SignUpForm() {
         mutationFn: async (values: z.infer<typeof signUpSchema>) => {
             const { confirmPassword, ...signUpValues } = values
             const response = await authClient.signUp.email(signUpValues)
-            return response
+
+            if (response.error) {
+                throw new Error(response.error.message)
+            }
+
+            return response.data
         }
     })
 
@@ -53,7 +58,7 @@ export function SignUpForm() {
             onSuccess: (data) => {
                 toast({
                     title: "Success",
-                    description: "Account created successfully",
+                    description: `Account ${data.user.name} created successfully`,
                     variant: "default"
                 })
                 form.reset()
