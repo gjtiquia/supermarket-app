@@ -10,9 +10,9 @@ export const Route = createFileRoute('/')({
 function Index() {
     return (
         <div className="container mx-auto py-6 max-w-md">
-            <SignUpForm />
+            {/* <SignUpForm /> */}
             {/* <SignIn /> */}
-            {/* <SignUp /> */}
+            <SignUp />
         </div>
     )
 }

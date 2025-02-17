@@ -9,22 +9,88 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from "@/components/ui/form";
+
+const signUpSchema = z.object({
+    firstName: z.string().min(2, "First name must be at least 2 characters"),
+    lastName: z.string().min(2, "Last name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    passwordConfirmation: z.string()
+}).refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
+});
+
+type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUp() {
-    const { toast } = useToast()
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
+
+    const form = useForm<SignUpFormValues>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            passwordConfirmation: "",
+        },
+    });
+
+    const signUpMutation = useMutation({
+        mutationFn: async (values: SignUpFormValues) => {
+            const response = await authClient.signUp.email({
+                email: values.email,
+                password: values.password,
+                name: `${values.firstName} ${values.lastName}`,
+                callbackURL: "/dashboard", // TODO : callback to homepage (?)
+            });
+
+            if (response.error) {
+                throw new Error(response.error.message);
+            }
+
+            return response.data;
+        },
+        onError: (error) => {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to create account. Please try again.",
+            });
+            console.error(error);
+        },
+        onSuccess: (data) => {
+            toast({
+                title: "Success",
+                description: `Account ${data.user.name} created successfully`,
+                variant: "default"
+            });
+            form.reset();
+            // TODO : redirect to homepage (?)
+        }
+    });
+
+    function onSubmit(values: SignUpFormValues) {
+        signUpMutation.mutate(values);
+    }
 
     return (
-        <Card className="z-50 rounded-md rounded-t-none max-w-md">
+        <Card className="z-50 rounded-md max-w-md">
             <CardHeader>
                 <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
                 <CardDescription className="text-xs md:text-sm">
@@ -32,113 +98,114 @@ export function SignUp() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="first-name">First name</Label>
-                            <Input
-                                id="first-name"
-                                placeholder="Max"
-                                required
-                                onChange={(e) => {
-                                    setFirstName(e.target.value);
-                                }}
-                                value={firstName}
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                        <div className="grid grid-cols-2 gap-4 items-start">
+                            <FormField
+                                control={form.control}
+                                name="firstName"
+                                render={({ field }) => (
+                                    <FormItem className="grid gap-2">
+                                        <Label htmlFor="first-name">First name</Label>
+                                        <FormControl>
+                                            <Input
+                                                id="first-name"
+                                                placeholder="Max"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="lastName"
+                                render={({ field }) => (
+                                    <FormItem className="grid gap-2">
+                                        <Label htmlFor="last-name">Last name</Label>
+                                        <FormControl>
+                                            <Input
+                                                id="last-name"
+                                                placeholder="Robinson"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="last-name">Last name</Label>
-                            <Input
-                                id="last-name"
-                                placeholder="Robinson"
-                                required
-                                onChange={(e) => {
-                                    setLastName(e.target.value);
-                                }}
-                                value={lastName}
-                            />
-                        </div>
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                            value={email}
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem className="grid gap-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <FormControl>
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            placeholder="m@example.com"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            autoComplete="new-password"
-                            placeholder="Password"
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem className="grid gap-2">
+                                    <Label htmlFor="password">Password</Label>
+                                    <FormControl>
+                                        <Input
+                                            id="password"
+                                            type="password"
+                                            placeholder="Password"
+                                            autoComplete="new-password"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Confirm Password</Label>
-                        <Input
-                            id="password_confirmation"
-                            type="password"
-                            value={passwordConfirmation}
-                            onChange={(e) => setPasswordConfirmation(e.target.value)}
-                            autoComplete="new-password"
-                            placeholder="Confirm Password"
+                        <FormField
+                            control={form.control}
+                            name="passwordConfirmation"
+                            render={({ field }) => (
+                                <FormItem className="grid gap-2">
+                                    <Label htmlFor="password-confirmation">Confirm Password</Label>
+                                    <FormControl>
+                                        <Input
+                                            id="password-confirmation"
+                                            type="password"
+                                            placeholder="Confirm Password"
+                                            autoComplete="new-password"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
-                    </div>
 
-                    <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={loading}
-                        onClick={async () => {
-                            await authClient.signUp.email({
-                                email,
-                                password,
-                                name: `${firstName} ${lastName}`,
-                                callbackURL: "/dashboard", // TODO : callback to homepage (?)
-                                fetchOptions: {
-                                    onResponse: () => {
-                                        setLoading(false);
-                                    },
-                                    onRequest: () => {
-                                        setLoading(true);
-                                    },
-                                    onError: (ctx) => {
-                                        toast({
-                                            variant: "destructive",
-                                            title: "Error",
-                                            description: "Failed to create account. Please try again.",
-                                        })
-                                        console.error(ctx.error.message);
-                                    },
-                                    onSuccess: async (ctx) => {
-                                        toast({
-                                            title: "Success",
-                                            description: `Account ${email} created successfully`,
-                                            variant: "default"
-                                        })
-                                        // TODO : redirect to homepage (?)
-                                    },
-                                },
-                            });
-                        }}
-                    >
-                        {loading ? (
-                            <Loader2 size={16} className="animate-spin" />
-                        ) : (
-                            "Create an account"
-                        )}
-                    </Button>
-                </div>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={signUpMutation.isPending}
+                        >
+                            {signUpMutation.isPending ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                "Create an account"
+                            )}
+                        </Button>
+                    </form>
+                </Form>
             </CardContent>
             <CardFooter>
                 <div className="flex justify-center w-full border-t py-4">
