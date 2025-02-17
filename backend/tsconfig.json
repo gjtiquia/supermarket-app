@@ -16,6 +16,14 @@
       "@/*": [
         "src/*"
       ]
-    }
-  }
+    },
+    "composite": true, // Required for frontend to use project references
+    "declaration": true, // Required for frontend to use project references
+    "declarationMap": true, // Required for frontend to use project references
+    "outDir": "./dist" // Required for frontend to use project references
+  },
+  // Required for frontend to use project references
+  "include": [
+    "src/**/*"
+  ]
 }
