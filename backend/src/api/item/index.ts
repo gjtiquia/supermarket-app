@@ -17,9 +17,7 @@ const app = new Hono()
     .post("/add", zValidator("json", addItemFormSchema), async (c) => {
 
         // TODO : refactor this nicely
-        const session = await auth.api.getSession({
-            headers: c.req.raw.headers
-        })
+        const session = await auth.api.getSession({ headers: c.req.raw.headers })
         if (session === null) {
             return c.json({ error: "Unauthorized" }, 401);
         }
