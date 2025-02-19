@@ -10,12 +10,15 @@ export const useAddItem = () => {
                 json: values
             })
 
-            const json = await response.json();
-            if ("error" in json) {
-                throw new Error(json.error)
+            if (!response.ok) {
+                const json = await response.json();
+                if ("error" in json) {
+                    throw new Error(json.error)
+                }
+                throw new Error("Failed to add item")
             }
 
-            return json
+            return response.json();
         }
     })
 }
