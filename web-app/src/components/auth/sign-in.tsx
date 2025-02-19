@@ -3,9 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import { authClient } from "@/lib/auth";
 import { useToast } from "@/components/ui/use-toast";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,7 +15,7 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import { queryClient, QUERY_KEYS } from "@/lib/tanstack";
+import { MUTATIONS } from "@/lib/tanstack";
 
 const signInSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -38,38 +36,27 @@ export function SignIn() {
         },
     });
 
-    const signInMutation = useMutation({
-        mutationFn: async (values: SignInFormValues) => {
-            const response = await authClient.signIn.email(values);
-
-            if (response.error) {
-                throw new Error(response.error.message);
-            }
-
-            return response.data;
-        },
-        onError: (error) => {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Failed to sign in. Please check your credentials and try again.",
-            });
-            console.error(error);
-        },
-        onSuccess: () => {
-            toast({
-                title: "Success",
-                description: "Signed in successfully",
-                variant: "default"
-            });
-            form.reset();
-            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.session] });
-            navigate({ to: "/" });
-        }
-    });
+    const signInMutation = MUTATIONS.AUTH.useSignIn();
 
     function onSubmit(values: SignInFormValues) {
-        signInMutation.mutate(values);
+        signInMutation.mutate(values, {
+            onSuccess: () => {
+                toast({
+                    title: "Success",
+                    description: "Signed in successfully",
+                    variant: "default"
+                });
+                form.reset();
+                navigate({ to: "/" });
+            },
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: "Failed to sign in. Please check your credentials and try again.",
+                });
+            }
+        });
     }
 
     return (

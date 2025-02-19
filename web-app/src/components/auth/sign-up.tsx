@@ -10,9 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import { authClient } from "@/lib/auth";
 import { useToast } from "@/components/ui/use-toast";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,6 +22,7 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
+import { MUTATIONS } from "@/lib/tanstack";
 
 const signUpSchema = z.object({
     firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -53,42 +52,27 @@ export function SignUp() {
         },
     });
 
-    const signUpMutation = useMutation({
-        mutationFn: async (values: SignUpFormValues) => {
-            const response = await authClient.signUp.email({
-                email: values.email,
-                password: values.password,
-                name: `${values.firstName} ${values.lastName}`,
-                callbackURL: "/",
-            });
-
-            if (response.error) {
-                throw new Error(response.error.message);
-            }
-
-            return response.data;
-        },
-        onError: (error) => {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Failed to create account. Please try again.",
-            });
-            console.error(error);
-        },
-        onSuccess: (data) => {
-            toast({
-                title: "Success",
-                description: `Account ${data.user.name} created successfully`,
-                variant: "default"
-            });
-            form.reset();
-            navigate({ to: "/" });
-        }
-    });
+    const signUpMutation = MUTATIONS.AUTH.useSignUp();
 
     function onSubmit(values: SignUpFormValues) {
-        signUpMutation.mutate(values);
+        signUpMutation.mutate(values, {
+            onSuccess: (data) => {
+                toast({
+                    title: "Success",
+                    description: `Account ${data.user.name} created successfully`,
+                    variant: "default"
+                });
+                form.reset();
+                navigate({ to: "/" });
+            },
+            onError: () => {
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: "Failed to create account. Please try again.",
+                });
+            }
+        });
     }
 
     return (
