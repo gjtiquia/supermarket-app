@@ -6,9 +6,12 @@ export const Route = createFileRoute('/account')({
 })
 
 function Account() {
+    // TODO : fix the center alignment
     return (
-        <div className='container mx-auto py-6 max-w-md'>
-            <SignIn />
+        <div className='h-full flex items-center justify-center'>
+            <div className='max-w-md w-full px-4'>
+                <SignIn />
+            </div>
         </div>
     )
 } 
