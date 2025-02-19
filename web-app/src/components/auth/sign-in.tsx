@@ -17,7 +17,7 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import { queryClient } from "@/lib/tanstack";
+import { queryClient, QUERY_KEYS } from "@/lib/tanstack";
 
 const signInSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -63,7 +63,7 @@ export function SignIn() {
                 variant: "default"
             });
             form.reset();
-            queryClient.invalidateQueries({ queryKey: ["session"] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.session] });
             navigate({ to: "/" });
         }
     });

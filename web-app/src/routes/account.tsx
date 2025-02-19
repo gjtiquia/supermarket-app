@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useNavigate } from '@tanstack/react-router'
 import { Loader2 } from 'lucide-react'
+import { queryClient, QUERY_KEYS } from "@/lib/tanstack";
 
 export const Route = createFileRoute('/account')({
     component: Account,
@@ -17,7 +18,7 @@ function Account() {
     const queryClient = useQueryClient()
 
     const { data: session, isLoading: isSessionLoading } = useQuery({
-        queryKey: ['session'],
+        queryKey: [QUERY_KEYS.session],
         queryFn: async () => {
             const response = await authClient.getSession()
             if (response.error) {
@@ -49,7 +50,7 @@ function Account() {
                 variant: "default"
             })
             // Invalidate the session query to update the UI
-            queryClient.invalidateQueries({ queryKey: ['session'] })
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.session] })
             navigate({ to: "/account" })
         }
     })
