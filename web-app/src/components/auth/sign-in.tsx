@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Link } from "@tanstack/react-router";
 import {
     Form,
     FormControl,
@@ -136,7 +137,15 @@ export function SignIn() {
                 </Form>
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className="flex-col space-y-4">
+                <div className="flex justify-center w-full">
+                    <p className="text-sm text-muted-foreground">
+                        Don't have an account?{" "}
+                        <Link to="/signup" className="text-primary hover:underline">
+                            Sign up
+                        </Link>
+                    </p>
+                </div>
                 <div className="flex justify-center w-full border-t py-4">
                     <p className="text-center text-xs text-neutral-500">
                         Powered by{" "}
