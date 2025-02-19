@@ -11,16 +11,30 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
 import { Route as SearchImport } from './routes/search'
+import { Route as NotificationsImport } from './routes/notifications'
 import { Route as AddImport } from './routes/add'
 import { Route as AccountImport } from './routes/account'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const SearchRoute = SearchImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const NotificationsRoute = NotificationsImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,11 +81,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddImport
       parentRoute: typeof rootRoute
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsImport
+      parentRoute: typeof rootRoute
+    }
     '/search': {
       id: '/search'
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
   }
@@ -83,14 +111,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/add': typeof AddRoute
+  '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/add': typeof AddRoute
+  '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
 }
 
 export interface FileRoutesById {
@@ -98,15 +130,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/add': typeof AddRoute
+  '/notifications': typeof NotificationsRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/add' | '/search'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/add'
+    | '/notifications'
+    | '/search'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/add' | '/search'
-  id: '__root__' | '/' | '/account' | '/add' | '/search'
+  to: '/' | '/account' | '/add' | '/notifications' | '/search' | '/signup'
+  id:
+    | '__root__'
+    | '/'
+    | '/account'
+    | '/add'
+    | '/notifications'
+    | '/search'
+    | '/signup'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,14 +161,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   AddRoute: typeof AddRoute
+  NotificationsRoute: typeof NotificationsRoute
   SearchRoute: typeof SearchRoute
+  SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   AddRoute: AddRoute,
+  NotificationsRoute: NotificationsRoute,
   SearchRoute: SearchRoute,
+  SignupRoute: SignupRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +188,9 @@ export const routeTree = rootRoute
         "/",
         "/account",
         "/add",
-        "/search"
+        "/notifications",
+        "/search",
+        "/signup"
       ]
     },
     "/": {
@@ -149,8 +202,14 @@ export const routeTree = rootRoute
     "/add": {
       "filePath": "add.tsx"
     },
+    "/notifications": {
+      "filePath": "notifications.tsx"
+    },
     "/search": {
       "filePath": "search.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     }
   }
 }

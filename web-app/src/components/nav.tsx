@@ -1,4 +1,4 @@
-import { Home, Search, Plus, User } from 'lucide-react'
+import { Home, Search, Plus, User, Bell } from 'lucide-react'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { ThemeToggle } from './theme-toggle'
 import { cn } from '@/lib/utils'
@@ -7,6 +7,7 @@ const navItems = [
     { to: '/', icon: Home, label: 'Home' },
     { to: '/search', icon: Search, label: 'Search' },
     { to: '/add', icon: Plus, label: 'Add' },
+    { to: '/notifications', icon: Bell, label: 'Notifications' },
     { to: '/account', icon: User, label: 'Account' },
 ] as const
 

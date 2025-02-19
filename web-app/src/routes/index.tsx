@@ -1,6 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { SignIn } from '@/components/auth/sign-in'
-import { SignUp } from '@/components/auth/sign-up'
 
 export const Route = createFileRoute('/')({
     component: Index,
@@ -9,9 +7,7 @@ export const Route = createFileRoute('/')({
 function Index() {
     return (
         <div className="container mx-auto py-6 max-w-md">
-            {/* <SignUpForm /> */}
-            {/* <SignIn /> */}
-            <SignUp />
+            <p>TODO</p>
         </div>
     )
 }
