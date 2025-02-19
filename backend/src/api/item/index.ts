@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from '@hono/zod-validator'
 import { type RecentItems, dummyItems } from "@/api/item/recent";
 import { addItemFormSchema } from "@/api/item/add";
+import { auth } from "@/lib/auth";
 
 const app = new Hono()
     .get("/recent", (c) => c.json<RecentItems>(dummyItems))
@@ -14,9 +15,19 @@ const app = new Hono()
     //     return c.body(null);
     // })
     .post("/add", zValidator("json", addItemFormSchema), async (c) => {
+
+        // TODO : refactor this nicely
+        const session = await auth.api.getSession({
+            headers: c.req.raw.headers
+        })
+        if (session === null) {
+            return c.json({ error: "Unauthorized" }, 401);
+        }
+
         const json = c.req.valid("json");
 
         console.log(`${c.req.url}`)
+        console.log("user:", session.user.email);
         console.log("json:", json);
 
         // TODO : add to database, together with created_at / modified_at
