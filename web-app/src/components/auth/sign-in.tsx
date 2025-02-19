@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
     Form,
     FormControl,
@@ -17,6 +17,7 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
+import { queryClient } from "@/lib/tanstack";
 
 const signInSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -27,6 +28,7 @@ type SignInFormValues = z.infer<typeof signInSchema>;
 
 export function SignIn() {
     const { toast } = useToast();
+    const navigate = useNavigate();
 
     const form = useForm<SignInFormValues>({
         resolver: zodResolver(signInSchema),
@@ -61,7 +63,8 @@ export function SignIn() {
                 variant: "default"
             });
             form.reset();
-            // TODO: redirect to dashboard/homepage
+            queryClient.invalidateQueries({ queryKey: ["session"] });
+            navigate({ to: "/" });
         }
     });
 

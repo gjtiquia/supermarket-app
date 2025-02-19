@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useNavigate } from "@tanstack/react-router";
 import {
     Form,
     FormControl,
@@ -39,6 +40,7 @@ type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUp() {
     const { toast } = useToast();
+    const navigate = useNavigate();
 
     const form = useForm<SignUpFormValues>({
         resolver: zodResolver(signUpSchema),
@@ -57,7 +59,7 @@ export function SignUp() {
                 email: values.email,
                 password: values.password,
                 name: `${values.firstName} ${values.lastName}`,
-                callbackURL: "/dashboard", // TODO : callback to homepage (?)
+                callbackURL: "/",
             });
 
             if (response.error) {
@@ -81,7 +83,7 @@ export function SignUp() {
                 variant: "default"
             });
             form.reset();
-            // TODO : redirect to homepage (?)
+            navigate({ to: "/" });
         }
     });
 
