@@ -9,7 +9,13 @@ export const useAddItem = () => {
             const response = await client.api.item.add.$post({
                 json: values
             })
-            return response.json()
+
+            const json = await response.json();
+            if ("error" in json) {
+                throw new Error(json.error)
+            }
+
+            return json
         }
     })
 }
