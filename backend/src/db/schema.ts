@@ -1,4 +1,9 @@
 import { pgTable, text, integer, timestamp, boolean, decimal } from "drizzle-orm/pg-core";
+import { pgEnum } from "drizzle-orm/pg-core";
+
+// Define enums
+export const priceUnitEnum = pgEnum('price_unit_enum', ['each', 'per pack', 'per kg', 'per lb', 'per g', 'per oz', 'per mL', 'per L']);
+export const weightVolumeUnitEnum = pgEnum('weight_volume_unit_enum', ['kg', 'lb', 'oz', 'g', 'mL', 'L']);
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
@@ -46,13 +51,25 @@ export const verification = pgTable("verification", {
     updatedAt: timestamp('updated_at')
 });
 
-// TODO : need to review, especially the id type, and the price type
 export const item = pgTable("item", {
     id: text("id").primaryKey(),
     itemName: text("item_name").notNull(),
     price: decimal("price", { precision: 10, scale: 2 }).$type<number>().notNull(),
-    priceUnit: text("price_unit").notNull(),
+    priceUnit: priceUnitEnum("price_unit").notNull(),
     origin: text("origin"),
+
+    // Pack details
+    packCount: integer("pack_count"),
+
+    // Weight/Volume details
+    totalWeightOrVolume: decimal("total_weight_or_volume", { precision: 10, scale: 2 }).$type<number>(),
+    totalWeightOrVolumeUnit: weightVolumeUnitEnum("total_weight_or_volume_unit"),
+
+    // Additional details
+    aliases: text("aliases").array(),
+    discountReason: text("discount_reason"),
+
+    // References and timestamps
     userId: text("user_id").notNull().references(() => user.id, { onDelete: 'cascade' }),
     createdAt: timestamp("created_at").notNull(),
     updatedAt: timestamp("updated_at").notNull()

@@ -31,15 +31,26 @@ const app = new Hono()
         const now = new Date();
 
         // Prepare data for database insertion
-        const dbItem = {
+        const dbItem: typeof item.$inferInsert = {
             id: uuidv4(),
             itemName: json.itemName,
             price: json.price,
             priceUnit: json.priceUnit,
-            origin: json.origin ?? null,
+            origin: json.origin,
+
+            // Optional fields based on priceUnit
+            packCount: json.packCount,
+            totalWeightOrVolume: json.totalWeightOrVolume,
+            totalWeightOrVolumeUnit: json.totalWeightOrVolumeUnit,
+
+            // Additional details
+            aliases: json.aliases,
+            discountReason: json.discountReason,
+
+            // Required fields
             userId: session.user.id,
             createdAt: now,
-            updatedAt: now
+            updatedAt: now,
         };
 
         await db.insert(item).values(dbItem);
