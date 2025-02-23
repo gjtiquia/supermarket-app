@@ -5,7 +5,9 @@ import { Nav } from '@/components/nav'
 
 export const Route = createRootRoute({
     component: () => (
-        <div className="h-dvh pb-[4.5rem] md:pb-0 md:pl-[3.5rem] xl:pl-52">
+        // needs to be min-h-dvh to allow for resizing if the content is too long and scrollable
+        // tho at the expense of not having a "defined" height, so cant do center vertically with h-full flex items-center in children
+        <div className="min-h-dvh pb-[4.5rem] md:pb-0 md:pl-[3.5rem] xl:pl-52">
             <Nav />
             <Outlet />
             <Toaster />
