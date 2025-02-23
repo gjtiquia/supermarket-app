@@ -39,14 +39,14 @@ function Account() {
 
     if (isSessionLoading) {
         return (
-            <div className='h-full flex items-center justify-center'>
+            <div className='container mx-auto py-6 max-w-md'>
                 <div>Loading...</div>
             </div>
         )
     }
 
     return (
-        <div className='h-full flex items-center justify-center'>
+        <div className='container mx-auto py-6 max-w-md'>
             <div className='max-w-md w-full px-4'>
                 {session ? (
                     <div className='space-y-4'>

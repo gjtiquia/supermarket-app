@@ -20,7 +20,7 @@ function Add() {
 
     if (!session) {
         return (
-            <div className='p-2 max-w-sm mx-auto'>
+            <div className='p-6 max-w-2xl mx-auto'>
                 <Card>
                     <CardHeader>
                         <CardTitle>Sign in required</CardTitle>
@@ -34,7 +34,7 @@ function Add() {
     }
 
     return (
-        <div className='p-2 max-w-sm mx-auto'>
+        <div className='p-6 flex justify-center '>
             <AddItemForm />
         </div>
     )

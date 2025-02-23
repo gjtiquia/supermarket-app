@@ -5,7 +5,7 @@ import { Nav } from '@/components/nav'
 
 export const Route = createRootRoute({
     component: () => (
-        <div className="min-h-dvh pb-[4.5rem] md:pb-0 md:pl-[3.5rem] xl:pl-52">
+        <div className="h-dvh pb-[4.5rem] md:pb-0 md:pl-[3.5rem] xl:pl-52">
             <Nav />
             <Outlet />
             <Toaster />

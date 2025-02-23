@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/accordion"
 import { useToast } from "@/components/ui/use-toast"
 import { MUTATIONS } from "@/lib/tanstack"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 
 import { addItemFormSchema } from "../../../backend/src/api/item/add"
 
@@ -84,210 +85,220 @@ export function AddItemForm() {
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                    control={form.control}
-                    name="itemName"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Item Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="eg. Apples" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Price ($)</FormLabel>
-                                <FormControl>
-                                    <Input type="number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="priceUnit"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Unit</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <Card className="max-w-2xl">
+            <CardHeader>
+                <CardTitle className="text-lg md:text-xl">Add New Item</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
+                    Fill in the details below to add a new item to the inventory
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="itemName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Item Name</FormLabel>
                                     <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a unit" />
-                                        </SelectTrigger>
+                                        <Input placeholder="eg. Apples" {...field} />
                                     </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="each">each</SelectItem>
-                                        <SelectItem value="per pack">per pack</SelectItem>
-                                        <SelectItem value="per kg">per kg</SelectItem>
-                                        <SelectItem value="per lb">per lb</SelectItem>
-                                        <SelectItem value="per g">per g</SelectItem>
-                                        <SelectItem value="per oz">per oz</SelectItem>
-                                        <SelectItem value="per mL">per mL</SelectItem>
-                                        <SelectItem value="per L">per L</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-                <FormField
-                    control={form.control}
-                    name="origin"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Origin</FormLabel>
-                            <FormControl>
-                                <Input placeholder="eg. Costco" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger>Advanced</AccordionTrigger>
-                        <AccordionContent className="space-y-4">
-                            {
-                                priceUnit === "per pack" &&
-                                <FormField
-                                    control={form.control}
-                                    name="packCount"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Pack Count</FormLabel>
-                                            <FormControl>
-                                                <Input type="number" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            }
-                            {
-                                (priceUnit === "per pack" || priceUnit === "each") &&
-                                <div className="grid grid-cols-2 gap-4">
-                                    <FormField
-                                        control={form.control}
-                                        name="totalWeightOrVolume"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Total Weight or Volume</FormLabel>
-                                                <FormControl>
-                                                    <Input type="number" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="totalWeightOrVolumeUnit"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Unit</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select a unit" />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="kg">kg</SelectItem>
-                                                        <SelectItem value="lb">lb</SelectItem>
-                                                        <SelectItem value="g">g</SelectItem>
-                                                        <SelectItem value="oz">oz</SelectItem>
-                                                        <SelectItem value="mL">mL</SelectItem>
-                                                        <SelectItem value="L">L</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                            }
-
+                        <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}
-                                name="discountReason"
+                                name="price"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Discount Reason</FormLabel>
+                                        <FormLabel>Price ($)</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="eg. Weekend Discount" {...field} />
+                                            <Input type="number" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
 
-                            <div className="space-y-2">
-                                <FormLabel>Aliases</FormLabel>
-                                <div className="space-y-2">
-                                    {fieldArray.fields.map((field, index) => (
-                                        <div key={field.id} className="flex gap-2">
+                            <FormField
+                                control={form.control}
+                                name="priceUnit"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Unit</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a unit" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="each">each</SelectItem>
+                                                <SelectItem value="per pack">per pack</SelectItem>
+                                                <SelectItem value="per kg">per kg</SelectItem>
+                                                <SelectItem value="per lb">per lb</SelectItem>
+                                                <SelectItem value="per g">per g</SelectItem>
+                                                <SelectItem value="per oz">per oz</SelectItem>
+                                                <SelectItem value="per mL">per mL</SelectItem>
+                                                <SelectItem value="per L">per L</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <FormField
+                            control={form.control}
+                            name="origin"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Origin</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="eg. Costco" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>Advanced</AccordionTrigger>
+                                <AccordionContent className="space-y-4">
+                                    {
+                                        priceUnit === "per pack" &&
+                                        <FormField
+                                            control={form.control}
+                                            name="packCount"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Pack Count</FormLabel>
+                                                    <FormControl>
+                                                        <Input type="number" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    }
+                                    {
+                                        (priceUnit === "per pack" || priceUnit === "each") &&
+                                        <div className="grid grid-cols-2 gap-4">
                                             <FormField
                                                 control={form.control}
-                                                name={`aliases.${index}`}
+                                                name="totalWeightOrVolume"
                                                 render={({ field }) => (
-                                                    <FormItem className="flex-1">
+                                                    <FormItem>
+                                                        <FormLabel>Total Weight or Volume</FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="Alternative name" {...field} />
+                                                            <Input type="number" {...field} />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}
                                             />
-                                            <Button
-                                                type="button"
-                                                variant="destructive"
-                                                size="icon"
-                                                onClick={() => fieldArray.remove(index)}
-                                            >
-                                                ×
-                                            </Button>
+                                            <FormField
+                                                control={form.control}
+                                                name="totalWeightOrVolumeUnit"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Unit</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Select a unit" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="kg">kg</SelectItem>
+                                                                <SelectItem value="lb">lb</SelectItem>
+                                                                <SelectItem value="g">g</SelectItem>
+                                                                <SelectItem value="oz">oz</SelectItem>
+                                                                <SelectItem value="mL">mL</SelectItem>
+                                                                <SelectItem value="L">L</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
                                         </div>
-                                    ))}
-                                </div>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="mt-2"
-                                    onClick={handleAddAlias}
-                                >
-                                    Add Alias
-                                </Button>
-                            </div>
+                                    }
 
-                            <div className="pb-1"></div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+                                    <FormField
+                                        control={form.control}
+                                        name="discountReason"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Discount Reason</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="eg. Weekend Discount" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
-                <div className="py-1"></div>
-                <Button
-                    type="submit"
-                    disabled={addItemMutation.isPending}
-                >
-                    {addItemMutation.isPending ? "Adding..." : "Submit"}
-                </Button>
-            </form>
-        </Form>
+                                    <div className="space-y-2">
+                                        <FormLabel>Aliases</FormLabel>
+                                        <div className="space-y-2">
+                                            {fieldArray.fields.map((field, index) => (
+                                                <div key={field.id} className="flex gap-2">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name={`aliases.${index}`}
+                                                        render={({ field }) => (
+                                                            <FormItem className="flex-1">
+                                                                <FormControl>
+                                                                    <Input placeholder="Alternative name" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="icon"
+                                                        onClick={() => fieldArray.remove(index)}
+                                                    >
+                                                        ×
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="mt-2"
+                                            onClick={handleAddAlias}
+                                        >
+                                            Add Alias
+                                        </Button>
+                                    </div>
+
+                                    <div className="pb-1"></div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+
+                        <div className="py-1"></div>
+                        <Button
+                            type="submit"
+                            disabled={addItemMutation.isPending}
+                        >
+                            {addItemMutation.isPending ? "Adding..." : "Submit"}
+                        </Button>
+                    </form>
+                </Form>
+            </CardContent>
+        </Card>
     )
 }
