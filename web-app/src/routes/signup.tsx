@@ -7,7 +7,7 @@ export const Route = createFileRoute('/signup')({
 
 function SignUpPage() {
     return (
-        <div className="container mx-auto py-6 max-w-md">
+        <div className="container mx-auto p-6 max-w-md">
             <SignUp />
         </div>
     )
