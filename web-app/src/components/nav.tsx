@@ -56,7 +56,7 @@ export function Nav() {
             {/* Mobile Navigation */}
             <nav className="md:hidden fixed bottom-0 left-0 right-0 z-10 transition-colors duration-300">
                 <div className="bg-gradient-to-t from-background/95 to-background/60 backdrop-blur-md border-t shadow-lg">
-                    <div className="flex justify-around items-center max-w-md mx-auto">
+                    <div className="grid grid-cols-5 items-center max-w-md mx-auto">
                         {navItems.map(({ to, icon: Icon, label }) => (
                             <Link
                                 key={to}
@@ -67,10 +67,12 @@ export function Nav() {
                                     '[&.active]:text-primary [&.active]:font-medium [&.active]:scale-105',
                                     '[&.active]:before:absolute [&.active]:before:h-1 [&.active]:before:w-6',
                                     '[&.active]:before:bg-primary [&.active]:before:top-0 [&.active]:before:rounded-full',
-                                    '[&.active]:before:animate-fade-in'
+                                    '[&.active]:before:animate-fade-in',
+                                    // Special styling for the Add button (center item)
+                                    to === '/add' && 'justify-self-center'
                                 )}
                             >
-                                <Icon className="h-5 w-5" />
+                                <Icon className={cn("h-5 w-5", to === '/add' && "scale-125")} />
                                 <span className="text-[11px] font-medium opacity-85">{label}</span>
                             </Link>
                         ))}
