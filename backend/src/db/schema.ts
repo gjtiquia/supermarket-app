@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, timestamp, boolean, decimal } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
@@ -44,4 +44,16 @@ export const verification = pgTable("verification", {
     expiresAt: timestamp('expires_at').notNull(),
     createdAt: timestamp('created_at'),
     updatedAt: timestamp('updated_at')
+});
+
+// TODO : need to review, especially the id type, and the price type
+export const item = pgTable("item", {
+    id: text("id").primaryKey(),
+    itemName: text("item_name").notNull(),
+    price: decimal("price", { precision: 10, scale: 2 }).$type<number>().notNull(),
+    priceUnit: text("price_unit").notNull(),
+    origin: text("origin"),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: 'cascade' }),
+    createdAt: timestamp("created_at").notNull(),
+    updatedAt: timestamp("updated_at").notNull()
 });

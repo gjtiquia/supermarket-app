@@ -3,6 +3,9 @@ import { zValidator } from '@hono/zod-validator'
 import { type RecentItems, dummyItems } from "@/api/item/recent";
 import { addItemFormSchema } from "@/api/item/add";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { item } from "@/db/schema";
+import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono()
     .get("/recent", (c) => c.json<RecentItems>(dummyItems))
@@ -15,12 +18,9 @@ const app = new Hono()
     //     return c.body(null);
     // })
     .post("/add", zValidator("json", addItemFormSchema), async (c) => {
-
-        // TODO : refactor this nicely
         const session = await auth.api.getSession({ headers: c.req.raw.headers })
-        if (session === null) {
+        if (session === null)
             return c.json({ error: "Unauthorized" }, 401);
-        }
 
         const json = c.req.valid("json");
 
@@ -28,14 +28,28 @@ const app = new Hono()
         console.log("user:", session.user.email);
         console.log("json:", json);
 
-        // TODO : add to database, together with created_at / modified_at
+        const now = new Date();
+
+        // Prepare data for database insertion
+        const dbItem = {
+            id: uuidv4(),
+            itemName: json.itemName,
+            price: json.price,
+            priceUnit: json.priceUnit,
+            origin: json.origin ?? null,
+            userId: session.user.id,
+            createdAt: now,
+            updatedAt: now
+        };
+
+        await db.insert(item).values(dbItem);
 
         return c.json({
             message: `Added "${json.itemName}" at $${json.price} ${json.priceUnit}${json.origin ? ` from ${json.origin}` : ''}`,
             item: {
                 ...json,
-                created_at: new Date().toISOString(),
-                modified_at: new Date().toISOString()
+                created_at: now.toISOString(),
+                modified_at: now.toISOString()
             }
         });
     })
